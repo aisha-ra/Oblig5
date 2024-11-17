@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Søknadsskjema</h2>
+<form method="POST" action="/behandle"> 
+    <!-- Parent 1 Information -->
+    <h3>Forelder 1</h3>
+    <label for="navn_forelder_1">Navn:</label> 
+    <input type="text" id="navn_forelder_1" name="foresatt_navn" required />
+    <br> 
+
+    <label for="adresse_forelder_1">Adresse:</label>
+    <input type="text" id="adresse_forelder_1" name="foresatt_adresse" required /><br>
+
+    <label for="tlf_nr_forelder_1">Telefonnummer:</label> 
+    <input type="tel" id="tlf_nr_forelder_1" name="foresatt_tlfnr" pattern="[0-9]{8}" title="Telefonnummeret må være 8 sifre" required /><br>
+
+    <label for="personnummer_forelder_1">Personnummer:</label>
+    <input type="text" id="personnummer_forelder_1" name="foresatt_pnr" pattern="[0-9]{11}" title="Personnummer må være 11 sifre" required /><br>
+
+    <!-- Parent 2 Information -->
+    <h3>Forelder 2 (valgfritt)</h3>
+    <label for="navn_forelder_2">Navn:</label>
+    <input type="text" id="navn_forelder_2" name="foresatt_2_navn" />
+    <br> 
+
+    <label for="adresse_forelder_2">Adresse:</label> 
+    <input type="text" id="adresse_forelder_2" name="foresatt_2_adresse" /><br>
+
+    <label for="tlf_nr_forelder_2">Telefonnummer:</label> 
+    <input type="tel" id="tlf_nr_forelder_2" name="foresatt_2_tlfnr" pattern="[0-9]{8}" title="Telefonnummeret må være 8 sifre" /><br>
+
+    <label for="personnummer_forelder_2">Personnummer:</label> 
+    <input type="text" id="personnummer_forelder_2" name="foresatt_2_pnr" pattern="[0-9]{11}" title="Personnummer må være 11 sifre" /><br>
+
+    <!-- Child Information -->
+    <h3>Barn</h3>
+    <label for="personnummer_barnet_1">Personnummer - Barn 1:</label>
+    <input type="text" id="personnummer_barnet_1" name="barn_pnr" pattern="[0-9]{11}" title="Personnummer må være 11 sifre" required /><br>
+
+    <label for="personnummer_barnet_2">Personnummer - Barn 2 (valgfritt):</label>
+    <input type="text" id="personnummer_barnet_2" name="barn_2_pnr" pattern="[0-9]{11}" title="Personnummer må være 11 sifre" /><br>
+
+    <!-- Priority and Preferences -->
+    <h3>Fortrinnsrett</h3>
+    <fieldset>
+        <legend>Diverse fortrinnsrett</legend>
+        <label for="fortrinnsrett_barnevern">Fortrinnsrett - Barnevern:</label>
+        <input type="checkbox" id="fortrinnsrett_barnevern" name="fr_barnevern" /><br>
+    
+        <label for="fortrinnsrett_sykdom_i_familien">Fortrinnsrett - Sykdom i Familien:</label>
+        <input type="checkbox" id="fortrinnsrett_sykdom_i_familien" name="fr_sykd_familie" /><br>
+
+        <label for="fortrinnsrett_sykdome_paa_barnet">Fortrinnsrett - Sykdom på Barnet:</label>
+        <input type="checkbox" id="fortrinnsrett_sykdome_paa_barnet" name="fr_sykd_barn" /><br>
+
+        <label for="fortrinssrett_annet">Fortrinnsrett - Annet:</label>
+        <input type="text" id="fortrinssrett_annet" name="fr_annet" /><br>
+    </fieldset>
+    <br>
+
+    <label for="liste_over_barnehager_prioritert_5">Liste over Barnehager (Prioritert, kommadelt):</label>
+    <input type="text" id="liste_over_barnehager_prioritert_5" name="liste_over_barnehager_prioritert_5" required /><br>
+
+    <label for="tidspunkt_for_oppstart">Tidspunkt for Oppstart:</label>
+    <input type="date" id="tidspunkt_for_oppstart" name="tidspunkt_oppstart" required /><br>
+
+    <label for="har_sosken_som_gaar_i_barnehagen">Har Søsken som Går i Barnehagen:</label> 
+    <input type="checkbox" id="har_sosken_som_gaar_i_barnehagen" name="sosken_i_barnehagen" /><br>
+
+    <label for="brutto_inntekt_husholdning">Brutto Inntekt Husholdning (NOK):</label>
+    <input type="number" id="brutto_inntekt_husholdning" name="brutto_inntekt" min="0" step="1000" required /><br><br>
+
+    <input type="submit" value="Send Søknad"> 
+</form>
+{% endblock %}

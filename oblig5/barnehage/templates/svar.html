@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Søknadsresultat</h2>
+
+<!-- Display applicant and child information -->
+<p><strong>Søker:</strong> {{ data.get('navn_forelder_1', 'Ikke oppgitt') }}</p>
+<p><strong>Barn:</strong> {{ data.get('personnummer_barnet_1', 'Ikke oppgitt') }}</p>
+
+<!-- Check if there are available kindergartens -->
+{% if kglist %}
+    <h3>Tilbud (høyest prioritert øverst):</h3>
+    <ul>
+        {% for kg in kglist %}
+            <li>{{ kg.barnehage_navn }} - Ledige plasser: {{ kg.barnehage_ledige_plasser }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p><strong>AVSLAG:</strong> Ingen ledige plasser på de valgte barnehager.</p>
+{% endif %}
+
+<!-- Additional information about preferences -->
+<h3>Valg og Fortrinnsrett:</h3>
+<ul>
+    <li><strong>Prioriterte Barnehager:</strong> {{ data.get('liste_over_barnehager_prioritert_5', 'Ikke oppgitt') }}</li>
+    <li><strong>Fortrinnsrett - Barnevern:</strong> {{ 'Ja' if data.get('fortrinnsrett_barnevern') else 'Nei' }}</li>
+    <li><strong>Fortrinnsrett - Sykdom i Familien:</strong> {{ 'Ja' if data.get('fortrinnsrett_sykdom_i_familien') else 'Nei' }}</li>
+    <li><strong>Fortrinnsrett - Sykdom på Barnet:</strong> {{ 'Ja' if data.get('fortrinnsrett_sykdome_paa_barnet') else 'Nei' }}</li>
+    <li><strong>Fortrinnsrett - Annet:</strong> {{ data.get('fortrinssrett_annet', 'Ikke oppgitt') }}</li>
+    <li><strong>Oppstartsdato:</strong> {{ data.get('tidspunkt_for_oppstart', 'Ikke oppgitt') }}</li>
+    <li><strong>Søsken i barnehage:</strong> {{ 'Ja' if data.get('har_sosken_som_gaar_i_barnehagen') else 'Nei' }}</li>
+    <li><strong>Brutto Husholdningsinntekt:</strong> {{ data.get('brutto_inntekt_husholdning', 'Ikke oppgitt') }} NOK</li>
+</ul>
+{% endblock %}

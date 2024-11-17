@@ -1,0 +1,83 @@
+<!-- commit.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Commit Confirmation and Data Overview</h2>
+<p>Alle endringene er skrevet til dbexcel!</p>
+
+<!-- Parents Table -->
+<h3>Foreldre</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Navn</th>
+        <th>Adresse</th>
+        <th>Telefon</th>
+        <th>Personnummer</th>
+    </tr>
+    {% for parent in forelder %}
+    <tr>
+        <td>{{ parent.foresatt_id }}</td>
+        <td>{{ parent.foresatt_navn }}</td>
+        <td>{{ parent.foresatt_adresse }}</td>
+        <td>{{ parent.foresatt_tlfnr }}</td>
+        <td>{{ parent.foresatt_pnr }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Children Table -->
+<h3>Barn</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Navn</th>
+        <th>Personnummer</th>
+    </tr>
+    {% for child in barn %}
+    <tr>
+        <td>{{ child.barn_id }}</td>
+        <td>{{ child.barn_navn }}</td>
+        <td>{{ child.barn_pnr }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Kindergartens Table -->
+<h3>Barnehager</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Navn</th>
+        <th>Ledige Plasser</th>
+    </tr>
+    {% for kindergarten in barnehage %}
+    <tr>
+        <td>{{ kindergarten.barnehage_id }}</td>
+        <td>{{ kindergarten.barnehage_navn }}</td>
+        <td>{{ kindergarten.barnehage_ledige_plasser }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Applications Table -->
+<h3>Søknader</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Forelder 1</th>
+        <th>Forelder 2</th>
+        <th>Barn</th>
+        <th>Prioriterte Barnehager</th>
+    </tr>
+    {% for application in soknad %}
+    <tr>
+        <td>{{ application.sok_id }}</td>
+        <td>{{ application.foresatt_1 }}</td>
+        <td>{{ application.foresatt_2 }}</td>
+        <td>{{ application.barn_1 }}</td>
+        <td>{{ application.barnehager_prioritert }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

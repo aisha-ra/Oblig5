@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Søknader</h2>
+<table border="1">
+    <tr>
+        <th>Application ID</th>
+        <th>Applicant Name</th>
+        <th>Child Name</th>
+        <th>Priority Status</th>
+        <th>Preferred Kindergarten</th>
+    </tr>
+    {% for app in soknader %}
+    <tr>
+        <td>{{ app.sok_id }}</td>
+        <td>{{ app.foresatt_1.foresatt_navn }}</td>
+        <td>{{ app.barn_1.barn_navn }}</td>
+        <td>{{ app.priority_status }}</td>
+        <td>{{ app.barnehager_prioritert }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

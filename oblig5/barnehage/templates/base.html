@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} - OBLIG5</title>
+    <style>
+        body {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        a:link { color: #0000EE; }
+        a:visited { color: #551A8B; }
+        a:link:active, :visited:active { color: #FF0000; }
+
+        .title {
+            margin: 5px;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        nav .left-menu, nav .right-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: #0000EE;
+            font-size: 1em;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <!-- Left-aligned menu -->
+        <span class="left-menu">
+            <span>MENY:</span>
+            <a href="{{ url_for('index') }}">Hjem</a>
+            <a href="{{ url_for('behandle') }}">Søk</a>
+            <a href="{{ url_for('barnehager') }}">Barnehager</a>
+            <a href="{{ url_for('soknader') }}">Søknader</a>
+            <a href="{{ url_for('statistikk') }}">Statistikk</a>
+            
+        </span>
+
+        <!-- Right-aligned menu -->
+        <span class="right-menu"> 
+            <span>ADMIN:</span>
+            <a href="{{ url_for('commit') }}">Commit</a>
+        </span>
+    </nav>
+    <hr>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
