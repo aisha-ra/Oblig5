@@ -47,10 +47,17 @@ def insert_barn(b):
 def insert_soknad(s):
     global soknad
 
+    # Check if the 'id' column exists, if not, add it
+    if 'id' not in soknad.columns:  # Check for 'id' column
+        soknad['id'] = pd.Series(dtype='int')  # Initialize empty 'id' column
+
     # Create a new ID for the application
     new_id = soknad['id'].max() + 1 if not soknad.empty else 1
 
-    # Add the new application to the dataframe
+    # Check the columns of the DataFrame before inserting
+    print(soknad.columns)  # Debugging: Print out the columns
+
+    # Add the new application to the dataframe, ensuring the data matches the number of columns
     soknad = pd.concat([
         soknad,
         pd.DataFrame([[
@@ -65,10 +72,10 @@ def insert_soknad(s):
             s.liste_over_barnehager_prioritert_5,
             s.sosken_i_barnehagen,
             s.tidspunkt_oppstart,
-            s.brutto_inntekt
+            s.brutto_inntekt,
+            None  # Ensure all columns are populated; this is for any missing column
         ]], columns=soknad.columns)
     ], ignore_index=True)
-
 
 # Select functions
 def select_alle_barnehager():
@@ -85,12 +92,12 @@ def select_alle_soknader():
     try:
         # Iterate over each row in the soknad DataFrame
         for _, row in soknad.iterrows():
-            print("Processing soknad ID:", row['sok_id'])  # Debug print
+            print("Processing soknad ID:", row['id'])  # Debug print
 
             # Retrieve guardian (foresatt) 1 data
             foresatt_1 = forelder[forelder['foresatt_id'] == row['foresatt_1']]
             if foresatt_1.empty:
-                print("Warning: foresatt_1 not found for soknad ID:", row['sok_id'])
+                print("Warning: foresatt_1 not found for soknad ID:", row['id'])
                 continue  # Skip this row if no matching foresatt_1 is found
             foresatt_1_obj = Foresatt(
                 foresatt_id=foresatt_1.iloc[0]['foresatt_id'],
@@ -116,7 +123,7 @@ def select_alle_soknader():
             # Retrieve child (barn) data
             barn_1 = barn[barn['barn_id'] == row['barn_1']]
             if barn_1.empty:
-                print("Warning: barn not found for soknad ID:", row['sok_id'])
+                print("Warning: barn not found for soknad ID:", row['id'])
                 continue  # Skip this row if no matching barn is found
             barn_1_obj = Barn(
                 barn_id=barn_1.iloc[0]['barn_id'],
@@ -125,7 +132,7 @@ def select_alle_soknader():
 
             # Create a Soknad object
             soknad_obj = Soknad(
-                sok_id=row['sok_id'],
+                sok_id=row['id'],
                 foresatt_1=foresatt_1_obj,
                 foresatt_2=foresatt_2_obj,
                 barn_1=barn_1_obj,
@@ -163,3 +170,4 @@ def get_all_data():
         'soknad': soknad.to_dict(orient='records')
     }
     return data
+
