@@ -1,5 +1,5 @@
 import pandas as pd
-from kgmodel import Barnehage  # Ensure Barnehage is imported correctly
+from kgmodel import Barnehage  
 
 def initiate_db(db_name):
     # Example kindergarten data
@@ -36,3 +36,4 @@ def initiate_db(db_name):
 
 # Initialize database
 initiate_db("kgdata.xlsx")
+
