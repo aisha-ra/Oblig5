@@ -4,13 +4,13 @@ from kgmodel import Barnehage
 def initiate_db(db_name):
     # Example kindergarten data
     barnehage_liste = [
-        Barnehage(barnehage_id=1, barnehage_navn="Sunshine Preschool", barnehage_antall_plasser=50, barnehage_ledige_plasser=15),
-        Barnehage(barnehage_id=2, barnehage_navn="Happy Days Nursery", barnehage_antall_plasser=25, barnehage_ledige_plasser=2),
-        Barnehage(barnehage_id=3, barnehage_navn="123 Learning Center", barnehage_antall_plasser=35, barnehage_ledige_plasser=4),
-        Barnehage(barnehage_id=4, barnehage_navn="ABC Kindergarten", barnehage_antall_plasser=12, barnehage_ledige_plasser=0),
-        Barnehage(barnehage_id=5, barnehage_navn="Tiny Tots Academy", barnehage_antall_plasser=15, barnehage_ledige_plasser=5),
-        Barnehage(barnehage_id=6, barnehage_navn="Giggles and Grins Childcare", barnehage_antall_plasser=10, barnehage_ledige_plasser=0),
-        Barnehage(barnehage_id=7, barnehage_navn="Playful Pals Daycare", barnehage_antall_plasser=40, barnehage_ledige_plasser=6)
+        Barnehage(barnehage_id=1, barnehage_navn="Tinnstua Barnehage", barnehage_antall_plasser=50, barnehage_ledige_plasser=15),
+        Barnehage(barnehage_id=2, barnehage_navn="Søm Barnehage", barnehage_antall_plasser=25, barnehage_ledige_plasser=2),
+        Barnehage(barnehage_id=3, barnehage_navn="Bamsebo Barnehage", barnehage_antall_plasser=35, barnehage_ledige_plasser=4),
+        Barnehage(barnehage_id=4, barnehage_navn="Veslefrikk Barnehage", barnehage_antall_plasser=12, barnehage_ledige_plasser=0),
+        Barnehage(barnehage_id=5, barnehage_navn="Jordbærveien Barnehage", barnehage_antall_plasser=15, barnehage_ledige_plasser=5),
+        Barnehage(barnehage_id=6, barnehage_navn="Timenes Barnehage", barnehage_antall_plasser=10, barnehage_ledige_plasser=0),
+        Barnehage(barnehage_id=7, barnehage_navn="Hånes Barnehage", barnehage_antall_plasser=40, barnehage_ledige_plasser=6)
     ]
     
     # Define columns for each sheet
