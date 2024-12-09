@@ -1,14 +1,15 @@
 # kg.py
-from flask import Flask, url_for, render_template, request, redirect, session, send_file
+from flask import Flask, url_for, render_template, request, redirect, session
 from kgmodel import Foresatt, Barn, Soknad, Barnehage
 from kgcontroller import (
     insert_soknad, commit_all,
     select_alle_barnehager, select_alle_soknader,
     select_barnehage_instans, form_to_object_soknad,
     get_all_data
-)
-import matplotlib.pyplot as plt
-import io
+    )
+
+import dbexcel as db
+import altair as alt
 
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'
@@ -21,8 +22,12 @@ def index():
 
 @app.route('/barnehager')
 def barnehager():
-    information = select_alle_barnehager()
-    return render_template('barnehager.html', data=information)
+    try:
+        # Retrieve and render data for barnehager
+        information = select_alle_barnehager()
+        return render_template('barnehager.html', data=information)
+    except KeyError as e:
+        return render_template('error.html', message=f"Missing column in barnehage data: {e}")
 
 
 @app.route('/behandle', methods=['GET', 'POST'])
@@ -43,11 +48,11 @@ def svar():
     information = session.get('information', {})
     if not information:
         return redirect(url_for('index'))
-    
+
     priorities = information.get('liste_over_barnehager_prioritert_5', '')
     barnehage_liste = []
     message = "AVSLAG: Ingen ledige plasser på de valgte barnehager."
-    
+
     if priorities:
         kgpr = priorities.split(',')
         for kgid in kgpr:
@@ -59,36 +64,101 @@ def svar():
                     message = "Tilbud (høyest prioritert øverst):"
             except ValueError:
                 print(f"Invalid kindergarten ID: {kgid}")  # Debugging
-                
+            except KeyError as e:
+                return render_template('error.html', message=f"Missing column in barnehage data: {e}")
+
     return render_template('svar.html', data=information, kglist=barnehage_liste, message=message)
 
 
 @app.route('/soknader')
 def soknader():
-    all_soknader = select_alle_soknader()
-    return render_template('soknader.html', soknader=all_soknader)
+    try:
+        # Debugging: Log the entire database content before processing
+        print("Current state of db.soknad:")
+        print(db.soknad)
+
+        # Retrieve and render data for soknader
+        all_soknader = select_alle_soknader()
+        print("Data extracted for soknader:", all_soknader)  # Log processed data for debugging
+        return render_template('soknader.html', soknader=all_soknader)
+    except Exception as e:
+        return render_template('error.html', message=f"Error processing soknader: {e}")
 
 
 @app.route('/commit')
 def commit():
-    data = get_all_data()
-    commit_all()
-    print(f"Data committed to Excel: {data}")  # Debugging
-    return render_template('commit.html', **data)
+    try:
+        # Commit all data and display confirmation
+        data = get_all_data()
+        commit_all()
+        print(f"Data committed to Excel: {data}")  # Debugging
+        return render_template('commit.html', **data)
+    except Exception as e:
+        return render_template('error.html', message=f"Error committing data: {e}")
 
 
-@app.route('/statistikk')
+
+@app.route('/statistikk', methods=['GET'])
 def statistikk():
-    ages = [1, 2]
-    percentages = [30, 45]
+    valgt_kommune = "Kristiansand"
+    chart = None
 
-    plt.figure(figsize=(8, 4))
-    plt.bar(ages, percentages, color='blue')
-    plt.xlabel('Age')
-    plt.ylabel('Percentage of Children in Barnehage')
-    plt.title('Barnehage Attendance Statistics for Ages 1-2')
+    try:
+        # Log the entire database's current state
+        print("Current db.soknad state:")
+        print(db.soknad)
 
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    return send_file(img, mimetype='image/png')
+        # Check if 'kommune' column exists
+        if 'kommune' not in db.soknad.columns:
+            print("Error: 'kommune' column is missing from db.soknad")
+            return render_template('statistikk.html', message="Manglende kommune-kolonne i søknadsdata.")
+
+        # Log filtered data
+        kommune_data = db.soknad[db.soknad['kommune'] == valgt_kommune]
+        print("Filtered data for Kristiansand:")
+        print(kommune_data)
+
+        if kommune_data.empty:
+            return render_template('statistikk.html', message="Ingen data for valgt kommune.")
+
+        # Log the columns available
+        print("Columns in filtered data:")
+        print(kommune_data.columns)
+
+        # Validate required year columns
+        year_columns = ['y15', 'y16', 'y17', 'y18', 'y19', 'y20', 'y21', 'y22', 'y23']
+        if not all(col in kommune_data.columns for col in year_columns):
+            print("Missing required statistical columns.")
+            return render_template('statistikk.html', message="Manglende nødvendige kolonner i data.")
+
+        kommune_data_melted = kommune_data.melt(
+            id_vars='kommune',
+            value_vars=year_columns,
+            var_name='År',
+            value_name='Prosent'
+        )
+        kommune_data_melted['År'] = kommune_data_melted['År'].str.replace('y', '20')
+
+        print("Melted data for visualization:")
+        print(kommune_data_melted)
+
+        # Generate Altair chart
+        chart = alt.Chart(kommune_data_melted).mark_line(point=True).encode(
+            x=alt.X('År:N', title='År'),
+            y=alt.Y('Prosent:Q', title='Prosentandel'),
+            tooltip=['År', 'Prosent']
+        ).properties(
+            title=f'Statistikk for {valgt_kommune}',
+            width=800,
+            height=400
+        ).to_json()
+
+    except Exception as e:
+        print(f"Error generating statistics: {e}")
+        return render_template('statistikk.html', message=f"Error generating statistics: {e}")
+
+    return render_template('statistikk.html', chart=chart)
+
+
+if __name__ == '__main__':
+    app.run()
