@@ -4,68 +4,116 @@
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %} - OBLIG5</title>
     <style>
+        /* General body style */
         body {
-            margin-left: 20px;
-            margin-right: 20px;
-        }
-        a:link { color: #0000EE; }
-        a:visited { color: #551A8B; }
-        a:link:active, :visited:active { color: #FF0000; }
-
-        .title {
-            margin: 5px;
-            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Set background to black */
+            color: #fff; /* Set text color to white */
+            font-family: Arial, sans-serif;
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        nav .left-menu, nav .right-menu {
-            display: flex;
-            align-items: center;
-        }
-
-        nav a {
-            color: #0000EE;
-            font-size: 1em;
-            margin: 0 15px;
+        /* General link styling */
+        a:link, a:visited {
+            color: #00ffff; /* Light cyan for links */
             text-decoration: none;
         }
 
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
+        a:hover {
+            color: #ff6347; /* Tomato color on hover */
+        }
+
+        /* Menu container styling */
+        .menu-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            padding: 10px;
+            background-color: #222; /* Dark gray for menu background */
+            border-radius: 10px;
+            border: 2px solid #fff; /* White border */
+        }
+
+        /* Individual menu sections */
+        .menu-block {
+            padding: 10px;
+            width: 15%;
+            text-align: center;
+            border: 1px solid #444; /* Slightly lighter gray border for blocks */
+            border-radius: 5px;
+            background-color: #333; /* Darker gray for block background */
+            box-sizing: border-box;
+        }
+
+        /* Links inside menu blocks */
+        .menu-block a {
+            color: #fff; /* White links */
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        /* Content area styling */
+        .content {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #fff; /* White border */
+            border-radius: 10px;
+            background-color: #111; /* Very dark gray content background */
+        }
+        /* Footer styling */
+        footer {
+            color: #aaa; /* Light grey text */
+            text-align: right; /* Align text to the right */
+            padding: 10px 20px;
+            font-size: 0.8em; /* Slightly smaller font size */
         }
     </style>
 </head>
 <body>
-    <nav>
-        <!-- Left-aligned menu -->
-        <span class="left-menu">
-            <span>MENY:</span>
-            <a href="{{ url_for('index') }}">Hjem</a>
-            <a href="{{ url_for('behandle') }}">Søk</a>
-            <a href="{{ url_for('barnehager') }}">Barnehager</a>
-            <a href="{{ url_for('soknader') }}">Søknader</a>
-            <a href="{{ url_for('statistikk') }}">Statistikk</a>
-            
-        </span>
+    <!-- Header/Menu with Individual Menu Blocks -->
+    <div class="menu-container">
+        <!-- Home Menu -->
+        <div class="menu-block">
+            <a href="{{ url_for('index') }}">Home</a>
+        </div>
 
-        <!-- Right-aligned menu -->
-        <span class="right-menu"> 
-            <span>ADMIN:</span>
+        <!-- Search Menu -->
+        <div class="menu-block">
+            <a href="{{ url_for('behandle') }}">Search</a>
+        </div>
+
+        <!-- Barnehager Menu -->
+        <div class="menu-block">
+            <a href="{{ url_for('barnehager') }}">Barnehager</a>
+        </div>
+
+        <!-- Søknader Menu -->
+        <div class="menu-block">
+            <a href="{{ url_for('soknader') }}">Søknader</a>
+        </div>
+
+        <!-- Statistics Menu -->
+        <div class="menu-block">
+            <a href="{{ url_for('statistikk') }}">Statistics</a>
+        </div>
+
+        <!-- Admin Menu - Commit -->
+        <div class="menu-block">
             <a href="{{ url_for('commit') }}">Commit</a>
-        </span>
-    </nav>
+        </div>
+    </div>
+
     <hr>
+
+    <!-- Main content area -->
     <div class="content">
         {% block content %} {% endblock %}
     </div>
+
+ <!-- Footer Section -->
+ <footer>
+    © Gruppe 6B, Inc. All rights reserved
+</footer>
+
 </body>
 </html>
